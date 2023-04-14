@@ -8,24 +8,37 @@
 import SwiftUI
 
 struct ContentView: View {
-    let people = ["Arongka", "Imran", "Soudha", "Sakib", "Shaira"]
+    @State private var numbers = [Int]()
+    @State private var currentNumber = 1
     
     var body: some View {
-        VStack {
-            List(people, id: \.self) {
-                Text($0)
-            }
-            
-            List {
-                Text("Static row")
-                
-                ForEach(people, id: \.self) {
-                    Text($0)
+        NavigationView {
+            VStack {
+                List {
+                    ForEach(numbers, id: \.self) {
+                        Text("Row \($0)")
+                    }
+                    .onDelete(perform: removeRows)
                 }
                 
-                Text("Static row")
+                Button("Add Numbers") {
+                    numbers.append(currentNumber)
+                    currentNumber += 1
+                }
+            }
+            .padding()
+            .navigationTitle("onDelete()")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                EditButton()
             }
         }
+    }
+}
+
+extension ContentView {
+    func removeRows(at offsets: IndexSet) {
+        numbers.remove(atOffsets: offsets)
     }
 }
 
